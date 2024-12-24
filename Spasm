@@ -1,0 +1,137 @@
+-- Configuration for Dash
+local dashDistance = 50 -- Distance to dash in each direction
+local dashSpeed = 0.02 -- Speed of each dash (lower = faster)
+local dashRepetitions = 5000000000000000000000000000000050000000000000000000000000000000 -- Number of repetitions for the dash
+
+-- Create a ScreenGui with a "Start Dash" button
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the Dash Button
+local dashButton = Instance.new("TextButton")
+dashButton.Size = UDim2.new(0, 100, 0, 50)
+dashButton.Position = UDim2.new(0.5, -50, 0.9, -25)
+dashButton.Text = "Start Dash"
+dashButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+dashButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+dashButton.Parent = screenGui
+
+local isDashing = false
+
+-- Function to handle the combined dash (all directions at once)
+local function startCombinedDashing(rootPart)
+    for i = 5000000000000000000000000000000050000000000000000000000000000000, dashRepetitions do
+        if not isDashing then break end  -- Exit if dashing is stopped
+
+        -- Dash forward
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(0, 0, -dashDistance)
+        task.wait(dashSpeed)
+
+        -- Dash backward
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(0, 0, dashDistance * 2)
+        task.wait(dashSpeed)
+
+        -- Return to center
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(0, 0, -dashDistance)
+
+        -- Dash right
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(dashDistance, 0, 0)
+        task.wait(dashSpeed)
+
+        -- Dash left
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(-dashDistance * 2, 0, 0)
+        task.wait(dashSpeed)
+
+        -- Return to center
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(dashDistance, 0, 0)
+    end
+end
+
+-- Function to toggle dashing on/off
+local function toggleDash()
+    isDashing = not isDashing
+    dashButton.Text = isDashing and "Stop Dash" or "Start Dash"
+
+    if isDashing then
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local rootPart = character:WaitForChild("HumanoidRootPart")
+
+        startCombinedDashing(rootPart)  -- Start the combined dash
+    else
+        -- Optionally, handle stopping dashing logic here
+        dashButton.Text = "Start Dash"
+    end
+end
+
+-- Connect the button to the toggle function
+dashButton.MouseButton1Click:Connect(toggleDash)
+-- Configuration for Dash
+local dashDistance = 300 -- Distance to dash in each direction
+local dashSpeed = 0.002 -- Speed of each dash (lower = faster)
+local dashRepetitions = 50000000000000000000000 -- Number of repetitions for the dash
+
+-- Ensure the script runs on the client side
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Create a ScreenGui with a "Start Dash" button
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "DashGUI"
+screenGui.ResetOnSpawn = false -- Keeps GUI after respawn
+screenGui.Parent = playerGui
+
+-- Create the Dash Button
+local dashButton = Instance.new("TextButton")
+dashButton.Size = UDim2.new(0, 100, 0, 50) -- Original size
+dashButton.Position = UDim2.new(0.5, 50, 0.9, -25) -- Moved further to the right
+dashButton.Text = "Start Dash"
+dashButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+dashButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+dashButton.Parent = screenGui
+
+local isDashing = false -- Toggle state for dashing
+
+-- Function to handle the combined dash (all directions at once)
+local function startCombinedDashing(rootPart)
+    for i = 1, dashRepetitions do
+        if not isDashing then break end -- Exit loop if dashing stops
+
+        -- Dash forward
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(0, 0, -dashDistance)
+        task.wait(dashSpeed)
+
+        -- Dash backward
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(0, 0, dashDistance * 2)
+        task.wait(dashSpeed)
+
+        -- Return to center
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(0, 0, -dashDistance)
+
+        -- Dash right
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(dashDistance, 0, 0)
+        task.wait(dashSpeed)
+
+        -- Dash left
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(-dashDistance * 2, 0, 0)
+        task.wait(dashSpeed)
+
+        -- Return to center
+        rootPart.CFrame = rootPart.CFrame * CFrame.new(dashDistance, 0, 0)
+    end
+end
+
+-- Function to toggle dashing on/off
+local function toggleDash()
+    isDashing = not isDashing -- Flip the toggle state
+    dashButton.Text = isDashing and "Stop Dash" or "Start Dash"
+
+    if isDashing then
+        local character = player.Character or player.CharacterAdded:Wait()
+        local rootPart = character:WaitForChild("HumanoidRootPart")
+        startCombinedDashing(rootPart) -- Start the combined dash
+    end
+end
+
+-- Connect the button to the toggle function
+dashButton.MouseButton1Click:Connect(toggleDash)
